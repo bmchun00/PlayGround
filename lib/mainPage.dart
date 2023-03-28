@@ -1,5 +1,7 @@
+import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:playground/splash.dart';
+
 
 class MainPage extends StatefulWidget{
   @override
@@ -7,29 +9,62 @@ class MainPage extends StatefulWidget{
 }
 
 class _MainPage extends State<MainPage>{
-  int? _bottomNavIndex;
+  int _currentIndex = 0;
+
+  Widget _buildFloatingBar() {
+    return CustomNavigationBar(
+      
+      blurEffect: true,
+      iconSize: 30.0,
+      selectedColor: mColor1,
+      strokeColor: mColor1,
+      unSelectedColor: Colors.grey[600],
+      backgroundColor: Colors.white,
+      borderRadius: Radius.circular(50.0),
+      items: [
+        CustomNavigationBarItem(
+          icon: Icon(
+            Icons.home
+          ),
+        ),
+        CustomNavigationBarItem(
+          icon: Icon(
+            Icons.shopping_bag_outlined
+          ),
+        ),
+        CustomNavigationBarItem(
+          icon: Icon(
+            Icons.account_balance
+          ),
+        ),
+        CustomNavigationBarItem(
+          icon: Icon(
+            Icons.search
+          ),
+        ),
+        CustomNavigationBarItem(
+          icon: Icon(
+            Icons.supervised_user_circle_outlined
+          ),
+        ),
+      ],
+      currentIndex: _currentIndex,
+      onTap: (index) {
+        setState(() {
+          _currentIndex = index;
+        });
+      },
+      isFloating: true,
+    );
+  }
+
   List<IconData> iconList = [Icons.home,Icons.search,];
 
-  @override
-  void initState(){
-    _bottomNavIndex =0;
-  }
 
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () {  },
-        //params
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: AnimatedBottomNavigationBar(
-        icons: iconList,
-        activeIndex: _bottomNavIndex!,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.softEdge,
-        onTap: (index) => setState(() => _bottomNavIndex = index),
-        //other params
-      ),
+      bottomNavigationBar: _buildFloatingBar(),
     );
   }
 }
