@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:playground/mainPage.dart';
 import 'package:playground/splash.dart';
 
 void main() {

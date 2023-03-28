@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'mainPage.dart';
 import 'splash.dart';
 
 class LoginPage extends StatefulWidget{
@@ -65,7 +66,9 @@ class _LoginPage extends State<LoginPage>{
             Container(
               width: 400,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
+                },
                 child: const Text('Login', style: TextStyle(fontSize: 15),),
                 style: ElevatedButton.styleFrom(
                   primary: mColor1,
