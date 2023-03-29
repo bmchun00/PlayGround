@@ -39,6 +39,7 @@ dependencies:
   animated_bottom_navigation_bar: ^1.2.0
   custom_navigation_bar: ^0.8.2
   flutter_icons: ^1.1.0
+  page_transition: ^2.0.9
 
 dev_dependencies:
   flutter_test:
