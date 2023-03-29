@@ -128,21 +128,10 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
       strokeColor: mColor1,
       unSelectedColor: Colors.grey[600],
       backgroundColor: Colors.white,
-      borderRadius: Radius.circular(50.0),
       items: [
         CustomNavigationBarItem(
           icon: Icon(
             Icons.home
-          ),
-        ),
-        CustomNavigationBarItem(
-          icon: Icon(
-            Icons.shopping_bag_outlined
-          ),
-        ),
-        CustomNavigationBarItem(
-          icon: Icon(
-            Icons.account_balance
           ),
         ),
         CustomNavigationBarItem(
@@ -152,7 +141,17 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
         ),
         CustomNavigationBarItem(
           icon: Icon(
-            Icons.supervised_user_circle_outlined
+            Icons.add_circle_outline_sharp
+          ),
+        ),
+        CustomNavigationBarItem(
+          icon: Icon(
+            Icons.notifications_none_rounded
+          ),
+        ),
+        CustomNavigationBarItem(
+          icon: Icon(
+            Icons.account_circle_outlined
           ),
         ),
       ],
@@ -162,7 +161,6 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
           _currentIndex = index;
         });
       },
-      isFloating: true,
     );
   }
 

@@ -46,25 +46,25 @@ class _LoginPage extends State<LoginPage>{
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Play",style: TextStyle(fontFamily: 'Pacifico',fontSize: 40,color: mColor1)),
-                Text("Ground.com", style: TextStyle(fontFamily: 'Pacifico',fontSize: 40,color: mColor2))
+                Text("Play",style: TextStyle(fontFamily: 'Pacifico',fontSize: 35,color: mColor1)),
+                Text("Ground.com", style: TextStyle(fontFamily: 'Pacifico',fontSize: 35,color: mColor2))
               ],
             ),
             SizedBox(height: 60,),
             Container(
-              width: 400,
+              width: 350,
               child: TextField(controller: idController,decoration: _fieldDecoration("ID or Email Adress"),style: TextStyle(fontSize: 20,color: Colors.black38),),
-              height: 50,
+              height: 45,
             ),
             SizedBox(height: 10,),
             Container(
-                width: 400,
+                width: 350,
                 child: TextField(controller: pwController,decoration: _fieldDecoration("Password"),style: TextStyle(fontSize: 20,color: Colors.black38),obscureText: true,),
-              height: 50,
+              height: 45,
             ),
             SizedBox(height: 40,),
             Container(
-              width: 400,
+              width: 350,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
@@ -75,8 +75,8 @@ class _LoginPage extends State<LoginPage>{
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  minimumSize: Size(400,50),
-                  maximumSize: Size(400,50),
+                  minimumSize: Size(350,45),
+                  maximumSize: Size(350,45),
                 ),
               ),
             ),
