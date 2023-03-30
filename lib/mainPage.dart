@@ -4,70 +4,21 @@ import 'package:playground/myPage.dart';
 import 'package:playground/splash.dart';
 List<Widget> cList = new List.empty(growable: true);
 
-Widget getDemoCard(){
-  return Card(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20)
-    ),
-    child: Column(
-      children: [
-        Row(
-          children: [
-            Container(height: 100,width: 100, decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-            image: const DecorationImage(image: AssetImage('image/2.jpg'),fit: BoxFit.cover)),
-            ),
-            SizedBox(width: 20,),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Bmc adaptive", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                SizedBox(height: 10,),
-                Text("Tech Something | BMC",style: TextStyle(fontSize: 10),)
-              ],
-            ),
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Jan 15, 2023 at 20:49 pm", style: TextStyle(fontSize: 10),),
-              SizedBox(height: 10,),
-              Text("Hello, I'm BMC. I enjoy eating salmon and eating good food. I want to go to school, but I can't because I'm stuck.", style: TextStyle(fontSize: 20),),
-              SizedBox(height: 15,),
-              Row(
-                children: [
-                  Icon(Icons.star_border),
-                  SizedBox(width: 10,),
-                  Text("73"),
-                  SizedBox(width: 30,),
-                  Icon(Icons.messenger_outline),
-                  SizedBox(width: 10,),
-                  Text("1"),
-                ],
-              ),
-            ],
-          ),
-        )
-      ],
-    )
-  );
-}
 
 Widget PageBuilder(int index){
   switch(index){
     case 0:
       return Scaffold(
-        extendBodyBehindAppBar: true,
         appBar:AppBar(
-          backgroundColor: Colors.transparent,
+          
+          centerTitle: true,
+          backgroundColor: Colors.white,
           elevation: 0,
+          title: Row(mainAxisAlignment:MainAxisAlignment.center, children: [Text("Play", style: TextStyle(color: mColor1, fontFamily: 'Pacifico'),),Text("Ground", style: TextStyle(color: mColor2, fontFamily: 'Pacifico'),),],),
         ),
         body: ListView.builder(
             scrollDirection: Axis.vertical,
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.all(5),
             itemCount: cList.length,
             itemBuilder: (BuildContext context, int index){
               return cList[index];
@@ -100,6 +51,64 @@ class MainPage extends StatefulWidget{
 }
 
 class _MainPage extends State<MainPage> with TickerProviderStateMixin{
+  Widget getDemoCard(){
+    Color isLiked = Colors.grey;
+    return Card(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(height: 100,width: 100, decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                    image: const DecorationImage(image: AssetImage('image/2.jpg'),fit: BoxFit.cover)),
+                ),
+                SizedBox(width: 20,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Bmc adaptive", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                    SizedBox(height: 10,),
+                    Text("Tech Something | BMC",style: TextStyle(fontSize: 10),)
+                  ],
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Jan 15, 2023 at 20:49 pm", style: TextStyle(fontSize: 10),),
+                  SizedBox(height: 10,),
+                  Text("Hello, I'm BMC. I enjoy eating salmon and eating good food. I want to go to school, but I can't because I'm stuck.", style: TextStyle(fontSize: 20),),
+                  SizedBox(height: 15, ),
+                  Row(
+                    children: [
+                      IconButton(icon : Icon(Icons.favorite), onPressed: (){
+                        print("heart");
+                        setState(() {
+                          isLiked = Colors.red;
+                        });
+                      },splashRadius: 15,),
+                      SizedBox(width: 10,),
+                      Text("73"),
+                      SizedBox(width: 30,),
+                      IconButton(icon: Icon(Icons.messenger_outline_rounded), onPressed: () {  }, splashRadius: 15,),
+                      SizedBox(width: 10,),
+                      Text("1"),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        )
+    );
+  }
+
   TabController? controller;
   int _currentIndex = 0;
 
@@ -164,7 +173,6 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
     );
   }
 
-  List<IconData> iconList = [Icons.home,Icons.search,];
 
 
   @override
