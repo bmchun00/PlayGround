@@ -20,6 +20,7 @@ class _LoginPage extends State<LoginPage>{
   }
   _fieldDecoration(String hintTxt){
     return InputDecoration(
+      contentPadding: EdgeInsets.fromLTRB(10, 4, 0, 0),
       fillColor: Color.fromRGBO(0, 0, 0, 0.050980392156862744),
       filled: true,
     enabledBorder: OutlineInputBorder(
@@ -50,21 +51,21 @@ class _LoginPage extends State<LoginPage>{
                 Text("Ground.com", style: TextStyle(fontFamily: 'Pacifico',fontSize: 35,color: mColor2))
               ],
             ),
-            SizedBox(height: 60,),
+            SizedBox(height: 55,),
             Container(
-              width: 350,
-              child: TextField(controller: idController,decoration: _fieldDecoration("ID or Email Adress"),style: TextStyle(fontSize: 20,color: Colors.black38),),
-              height: 45,
+              width: 300,
+              child: TextField(textAlignVertical: TextAlignVertical.center, controller: idController,decoration: _fieldDecoration("ID or Email Address"),style: TextStyle(fontSize: 17,color: Colors.black38),),
+              height: 40,
             ),
             SizedBox(height: 10,),
             Container(
-                width: 350,
-                child: TextField(controller: pwController,decoration: _fieldDecoration("Password"),style: TextStyle(fontSize: 20,color: Colors.black38),obscureText: true,),
-              height: 45,
+                width: 300,
+                child: TextField(textAlignVertical: TextAlignVertical.center, controller: pwController,decoration: _fieldDecoration("Password"),style: TextStyle(fontSize: 17,color: Colors.black38),obscureText: true,),
+              height: 40,
             ),
             SizedBox(height: 40,),
             Container(
-              width: 350,
+              width: 300,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
@@ -75,8 +76,8 @@ class _LoginPage extends State<LoginPage>{
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  minimumSize: Size(350,45),
-                  maximumSize: Size(350,45),
+                  minimumSize: Size(300,40),
+                  maximumSize: Size(300,40),
                 ),
               ),
             ),
