@@ -40,6 +40,7 @@ dependencies:
   custom_navigation_bar: ^0.8.2
   flutter_icons: ^1.1.0
   page_transition: ^2.0.9
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:

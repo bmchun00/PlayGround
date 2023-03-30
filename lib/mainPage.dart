@@ -2,15 +2,21 @@ import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:playground/myPage.dart';
 import 'package:playground/splash.dart';
-List<Widget> cList = new List.empty(growable: true);
+import 'package:intl/intl.dart';
 
+import 'detailPage.dart';
+
+List<Widget> cList = new List.empty(growable: true);
+Map cardDataDummyType1 = {'fullName' : 'Bmc Adaptive', 'type' : 1, 'userId' : 'BMC', 'cardId' : 1, 'time' : DateTime.parse('2023-03-29 20:18:04Z'), 'context' : 'Hello, Im BMC. I enjoy eating salmon and eating good food. I want to go to school, but I cant because Im stuck. Milkis zero is super delicious. Thank you.', 'image' : 'image/1.jpg'};
+Map cardDataDummyType2 = {'fullName' : 'Lisa soo', 'type' : 2, 'userId' : 'Lss09', 'cardId' : 2, 'time' : DateTime.parse('2023-03-28 10:28:04Z'), 'context' : 'developed by a Brazilian programmer and based on Semantle, challenges players to decipher the mysterious word of the day. Its a game on the web that', 'image' : 'image/2.jpg'};
+Map cardDataDummyType3 = {'fullName' : 'Joosu Park', 'type' : 3, 'userId' : 'jks2023', 'cardId' : 3, 'time' : DateTime.parse('2023-03-27 20:18:04Z'), 'context' : 'Thanos is a supervillain appearing in American comic books published by Marvel Comics. Created by writer-artist Jim Starlin, the character first appeared in The Invincible Iron Man', 'image' : 'image/3.jpg'};
+List<Map> cardDataList = List.empty(growable: true);
 
 Widget PageBuilder(int index){
   switch(index){
     case 0:
       return Scaffold(
         appBar:AppBar(
-          
           centerTitle: true,
           backgroundColor: Colors.white,
           elevation: 0,
@@ -51,8 +57,88 @@ class MainPage extends StatefulWidget{
 }
 
 class _MainPage extends State<MainPage> with TickerProviderStateMixin{
+  String typeToString(int type){
+    switch(type){
+      case 1:
+        return 'Formal';
+      case 2:
+        return 'Type 2';
+      case 3:
+        return 'Something..';
+      default:
+        return 'bluh';
+    }
+  }
+  
+  Widget getCard(Map data){
+    return Card(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(height: 100,width: 100, decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                    image: DecorationImage(image: AssetImage(data['image']),fit: BoxFit.cover)),
+                ),
+                SizedBox(width: 20,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(data['fullName'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                    SizedBox(height: 10,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(typeToString(data['type']), style: TextStyle(fontSize: 10),),
+                        Text(' | ', style: TextStyle(fontSize: 10),),
+                        Text(data['userId'], style: TextStyle(fontSize: 10),),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ),
+            InkWell(
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(data['cardId'])));
+              },
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(DateFormat.yMMMd().add_jm().format(data['time']), style: TextStyle(fontSize: 10),),
+                    SizedBox(height: 10,),
+                    Text(data['context'], style: TextStyle(fontSize: 20),),
+                    SizedBox(height: 15, ),
+                    Row(
+                      children: [
+                        IconButton(icon : Icon(Icons.favorite), onPressed: (){
+                          print("heart");
+                          setState(() {
+                          });
+                        },splashRadius: 15,),
+                        SizedBox(width: 10,),
+                        Text("73"),
+                        SizedBox(width: 30,),
+                        IconButton(icon: Icon(Icons.messenger_outline_rounded), onPressed: () {  }, splashRadius: 15,),
+                        SizedBox(width: 10,),
+                        Text("1"),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        )
+    );
+  }
+
   Widget getDemoCard(){
-    Color isLiked = Colors.grey;
     return Card(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20)
@@ -90,7 +176,6 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
                       IconButton(icon : Icon(Icons.favorite), onPressed: (){
                         print("heart");
                         setState(() {
-                          isLiked = Colors.red;
                         });
                       },splashRadius: 15,),
                       SizedBox(width: 10,),
@@ -114,11 +199,16 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
 
   @override
   void initState(){
-    cList.add(getDemoCard());
-    cList.add(getDemoCard());
-    cList.add(getDemoCard());
-    cList.add(getDemoCard());
-    cList.add(getDemoCard());
+    cardDataList.add(cardDataDummyType1);
+    cardDataList.add(cardDataDummyType2);
+    cardDataList.add(cardDataDummyType3);
+    cardDataList.add(cardDataDummyType1);
+    cardDataList.add(cardDataDummyType2);
+    cList.add(getCard(cardDataList[0]));
+    cList.add(getCard(cardDataList[1]));
+    cList.add(getCard(cardDataList[2]));
+    cList.add(getCard(cardDataList[3]));
+    cList.add(getCard(cardDataList[4]));
     super.initState();
     controller = TabController(length: 5, vsync: this);
   }
