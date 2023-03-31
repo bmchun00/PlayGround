@@ -108,15 +108,15 @@ class _UserDetailPage extends State<StatefulWidget>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(data['fullName'], style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),),
+                          fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'SCDream'),),
                       SizedBox(height: 10,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(typeToString(data['type']),
-                            style: TextStyle(fontSize: 10),),
-                          Text(' | ', style: TextStyle(fontSize: 10),),
-                          Text(data['userId'], style: TextStyle(fontSize: 10),),
+                            style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
+                          Text(' | ', style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
+                          Text(data['userId'], style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
                         ],
                       )
                     ],
@@ -182,8 +182,6 @@ class _UserDetailPage extends State<StatefulWidget>{
             title: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment:MainAxisAlignment.center, children: [Text("Play", style: TextStyle(color: mColor1, fontFamily: 'Pacifico'),),Text("Ground", style: TextStyle(color: mColor2, fontFamily: 'Pacifico'),),],),
             //SliverAppBar 영역을 고정시킨다. default false
             pinned: true,
-            // AppBar가 하단 List 내렸을 때 바로 보여야 한다 -> true
-            // List를 최상단으로 올렸을 때만 나와야 한다. -> false
             floating: false,
             centerTitle: true,
             leading: IconButton(icon: Icon(Icons.arrow_back_ios_new), color: mColor1, onPressed: () { Navigator.of(context).pop(); },),
@@ -200,7 +198,7 @@ class _UserDetailPage extends State<StatefulWidget>{
                   Text(userCardDataList[uIdTouIdNum(userId!)]['fullName'], style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, fontFamily: 'SCDream'),),
                   Container(
                     width: 50,
-                    child: Divider(color: Colors.black87,),
+                    child: Divider(color: Colors.black, thickness: 0.3,),
                   ),
                   Text(userId!, style: TextStyle(fontSize: 17,color: Colors.black54, fontFamily: 'SCDream'),),
                   SizedBox(height: 20,),

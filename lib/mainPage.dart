@@ -111,14 +111,14 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(data['fullName'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                      Text(data['fullName'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'SCDream'),),
                       SizedBox(height: 10,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(typeToString(data['type']), style: TextStyle(fontSize: 10),),
-                          Text(' | ', style: TextStyle(fontSize: 10),),
-                          Text(data['userId'], style: TextStyle(fontSize: 10),),
+                          Text(typeToString(data['type']), style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
+                          Text(' | ', style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
+                          Text(data['userId'], style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
                         ],
                       )
                     ],
@@ -135,9 +135,9 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(DateFormat.yMMMd().add_jm().format(data['time']), style: TextStyle(fontSize: 10),),
+                    Text(DateFormat.yMMMd().add_jm().format(data['time']), style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
                     SizedBox(height: 10,),
-                    Text(data['context'], style: TextStyle(fontSize: 20),),
+                    Text(data['context'], style: TextStyle(fontSize: 20, fontFamily: 'SCDream'),),
                     SizedBox(height: 15, ),
                     Row(
                       children: [
