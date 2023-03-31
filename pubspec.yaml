@@ -87,6 +87,14 @@ flutter:
     - family: Pacifico
       fonts:
         - asset: font/Pacifico-Regular.ttf
+
+    - family: Jeju
+      fonts:
+        - asset: font/jejuMyeongjo.ttf
+
+    - family: SCDream
+      fonts:
+        - asset: font/SCDream4.otf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'mainPage.dart';
-import 'splash.dart';
+import 'colors.dart';
 
 class LoginPage extends StatefulWidget{
   @override
