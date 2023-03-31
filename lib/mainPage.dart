@@ -1,10 +1,33 @@
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:playground/myPage.dart';
+import 'package:playground/postWritePage.dart';
 import 'package:playground/splash.dart';
 import 'package:intl/intl.dart';
-
+import 'package:playground/userDetailPage.dart';
 import 'detailPage.dart';
+
+Route _createRoute(StatefulWidget page) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        final tween = Tween(begin: begin, end: end);
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        );
+
+        return SlideTransition(
+          position: tween.animate(curvedAnimation),
+          child: child,
+        );
+      }
+  );
+}
 
 List<Widget> cList = new List.empty(growable: true);
 Map cardDataDummyType1 = {'fullName' : 'Bmc Adaptive', 'type' : 1, 'userId' : 'BMC', 'cardId' : 1, 'time' : DateTime.parse('2023-03-29 20:18:04Z'), 'context' : 'Hello, Im BMC. I enjoy eating salmon and eating good food. I want to go to school, but I cant because Im stuck. Milkis zero is super delicious. Thank you.', 'image' : 'image/1.jpg'};
@@ -77,29 +100,34 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
         ),
         child: Column(
           children: [
-            Row(
-              children: [
-                Container(height: 100,width: 100, decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-                    image: DecorationImage(image: AssetImage(data['image']),fit: BoxFit.cover)),
-                ),
-                SizedBox(width: 20,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(data['fullName'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 10,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(typeToString(data['type']), style: TextStyle(fontSize: 10),),
-                        Text(' | ', style: TextStyle(fontSize: 10),),
-                        Text(data['userId'], style: TextStyle(fontSize: 10),),
-                      ],
-                    )
-                  ],
-                ),
-              ],
+            InkWell(
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetailPage(data['userId']!)));
+              },
+              child: Row(
+                children: [
+                  Container(height: 100,width: 100, decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                      image: DecorationImage(image: AssetImage(data['image']),fit: BoxFit.cover)),
+                  ),
+                  SizedBox(width: 20,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(data['fullName'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                      SizedBox(height: 10,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(typeToString(data['type']), style: TextStyle(fontSize: 10),),
+                          Text(' | ', style: TextStyle(fontSize: 10),),
+                          Text(data['userId'], style: TextStyle(fontSize: 10),),
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
             InkWell(
               onTap: (){
@@ -116,7 +144,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
                     SizedBox(height: 15, ),
                     Row(
                       children: [
-                        IconButton(icon : Icon(Icons.favorite), onPressed: (){
+                        IconButton(icon : Icon(Icons.favorite_border), onPressed: (){
                           print("heart");
                           setState(() {
                           });
@@ -235,12 +263,12 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
         ),
         CustomNavigationBarItem(
           icon: Icon(
-            Icons.search
+            Icons.bar_chart_outlined
           ),
         ),
         CustomNavigationBarItem(
           icon: Icon(
-            Icons.add_circle_outline_sharp
+            Icons.add_box_rounded
           ),
         ),
         CustomNavigationBarItem(
@@ -256,9 +284,14 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
       ],
       currentIndex: _currentIndex,
       onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-        });
+        if(index==2){
+          Navigator.of(context).push(_createRoute(PostWritePage())); //nav 효과 추가 예정
+        }
+        else {
+          setState(() {
+            _currentIndex = index;
+          });
+        }
       },
     );
   }
