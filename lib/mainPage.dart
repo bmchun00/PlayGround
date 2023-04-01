@@ -24,12 +24,20 @@ class NoGlow extends ScrollBehavior {
 }
 
 class MainPage extends StatefulWidget{
+  String id;
+  String fullName;
+  MainPage(this.id, this.fullName);
+
   @override
-  State<MainPage> createState() => _MainPage();
+  State<MainPage> createState() => _MainPage(id, fullName);
 }
 
 class _MainPage extends State<MainPage> with TickerProviderStateMixin{
   bool _onLoading = true;
+  String id;
+  String fullName;
+
+  _MainPage(this.id, this.fullName);
 
   Widget PageBuilder(int index){
     switch(index){
@@ -149,7 +157,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
       for (var doc in event.docs) {
         var data = doc.data();
         print(data);
-        cardDataList.add({'fullName' : data[], 'type' : data['type'], 'userId' : data['user'], 'cardId' : doc.id, 'time' : DateTime.fromMillisecondsSinceEpoch(data['time'].seconds * 1000), 'content' : data['content'], 'image' : 'image/1.jpg', 'like' : data['like'], 'comment' : data['comment']});
+        cardDataList.add({'fullName' : data['fullName'], 'type' : data['type'], 'userId' : data['user'], 'cardId' : doc.id, 'time' : DateTime.fromMillisecondsSinceEpoch(data['time'].seconds * 1000), 'content' : data['content'], 'image' : 'image/1.jpg', 'like' : data['like'], 'comment' : data['comment']});
       }
       setState(() {
         _onLoading = false;
@@ -184,7 +192,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
       _onLoading = true;
     });
 
-    await Navigator.of(context).push(bottomUpRoute(PostWritePage()));
+    await Navigator.of(context).push(bottomUpRoute(PostWritePage(id,fullName)));
     setState(() {
       getData();
       _onLoading = false;

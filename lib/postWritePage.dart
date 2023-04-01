@@ -6,15 +6,24 @@ import 'colors.dart';
 
 
 class PostWritePage extends StatefulWidget{
+  String id;
+  String fullName;
+
+  PostWritePage(this.id, this.fullName);
+
   @override
-  State<StatefulWidget> createState() => _PostWritePage();
+  State<StatefulWidget> createState() => _PostWritePage(id, fullName);
 }
 
 class _PostWritePage extends State<StatefulWidget>{
+  String id;
+  String fullName;
+  _PostWritePage(this.id, this.fullName);
+
   TextEditingController? contentController;
 
   void submitCard (String content, String userId, String type) async{
-    await db.collection("posts").add({'fullName' : 'Anonymous User', 'type' : 'Formal', 'user' : 'anonymous', 'time' :Timestamp.fromDate(DateTime.now()), 'content' : content, 'like' : 0, 'comment' : 0}).then((DocumentReference doc) =>
+    await db.collection("posts").add({'fullName' : fullName, 'type' : 'Formal', 'user' : id, 'time' :Timestamp.fromDate(DateTime.now()), 'content' : content, 'like' : 0, 'comment' : 0}).then((DocumentReference doc) =>
     print('DocumentSnapshot added with ID: ${doc.id}'));
     Navigator.of(context).pop();
   }
