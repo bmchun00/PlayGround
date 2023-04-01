@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:playground/mainPage.dart';
 import 'colors.dart';
@@ -12,15 +13,14 @@ class PostWritePage extends StatefulWidget{
 class _PostWritePage extends State<StatefulWidget>{
   TextEditingController? contentController;
 
-  void submitCard (String content, String userId, int type){
-    setState(() {
-      cardDataList.insert(0,{'fullName' : 'Bmc Adaptive', 'type' : 1, 'userId' : 'BMC', 'cardId' : 1, 'time' : DateTime.now(), 'context' : content, 'image' : 'image/1.jpg'});
-    });
+  void submitCard (String content, String userId, String type) async{
+    await db.collection("posts").add({'fullName' : 'Anonymous User', 'type' : 'Formal', 'user' : 'anonymous', 'time' :Timestamp.fromDate(DateTime.now()), 'content' : content, 'like' : 0, 'comment' : 0}).then((DocumentReference doc) =>
+    print('DocumentSnapshot added with ID: ${doc.id}'));
     Navigator.of(context).pop();
   }
 
   @override
-  void initState(){
+  void initState() {
     contentController = TextEditingController();
   }
 
@@ -42,7 +42,7 @@ class _PostWritePage extends State<StatefulWidget>{
               TextField(
                 controller: contentController,
               ),
-              ElevatedButton(onPressed: () => submitCard(contentController!.value.text, 'bmchun00', 1), child: Text("Submit")),
+              ElevatedButton(onPressed: () => submitCard(contentController!.value.text, 'anonymous', 'Formal'), child: Text("Submit")),
             ],
           ),
         ),

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 class DetailPage extends StatefulWidget{
-  int? cardId;
+  String? cardId;
   @override
   State<StatefulWidget> createState() => _DetailPage(cardId!);
 
-  DetailPage(int cId){
+  DetailPage(String cId){
     cardId = cId;
   }
 }
 
 class _DetailPage extends State<StatefulWidget>{
-  int? cardId;
+  String? cardId;
 
-  _DetailPage(int cId){
+  _DetailPage(String cId){
     cardId = cId;
   }
 
