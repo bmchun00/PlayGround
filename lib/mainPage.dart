@@ -7,11 +7,16 @@ import 'package:intl/intl.dart';
 import 'package:playground/userDetailPage.dart';
 import 'detailPage.dart';
 import 'colors.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 
 Map cardDataDummyType1 = {'fullName' : 'Bmc Adaptive', 'type' : 1, 'userId' : 'BMC', 'cardId' : 1, 'time' : DateTime.parse('2023-03-29 20:18:04Z'), 'context' : 'Hello, Im BMC. I enjoy eating salmon and eating good food. I want to go to school, but I cant because Im stuck. Milkis zero is super delicious. Thank you.', 'image' : 'image/1.jpg'};
 Map cardDataDummyType2 = {'fullName' : 'Lisa soo', 'type' : 2, 'userId' : 'Lss09', 'cardId' : 2, 'time' : DateTime.parse('2023-03-28 10:28:04Z'), 'context' : 'developed by a Brazilian programmer and based on Semantle, challenges players to decipher the mysterious word of the day. Its a game on the web that', 'image' : 'image/2.jpg'};
 Map cardDataDummyType3 = {'fullName' : 'Joosu Park', 'type' : 3, 'userId' : 'jks2023', 'cardId' : 3, 'time' : DateTime.parse('2023-03-27 20:18:04Z'), 'context' : 'Thanos is a supervillain appearing in American comic books published by Marvel Comics. Created by writer-artist Jim Starlin, the character first appeared in The Invincible Iron Man', 'image' : 'image/3.jpg'};
 List<Map> cardDataList = List.empty(growable: true);
+FirebaseDatabase database = FirebaseDatabase.instance;
 
 class NoGlow extends ScrollBehavior {
   @override
@@ -166,18 +171,29 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
   int _currentIndex = 0;
 
   @override
-  void initState(){
+  Future<void> initState() async {
     cardDataList.add(cardDataDummyType1);
     cardDataList.add(cardDataDummyType2);
     cardDataList.add(cardDataDummyType3);
     cardDataList.add(cardDataDummyType1);
     cardDataList.add(cardDataDummyType2);
+
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     super.initState();
   }
 
   @override
   void dispose(){
     super.dispose();
+  }
+  _navigateAndDisplaySelection(BuildContext context) async {
+    // Navigator.push는 Future를 반환합니다. Future는 선택 창에서
+    // Navigator.pop이 호출된 이후 완료될 것입니다.
+    final result = await Navigator.of(context).push(bottomUpRoute(PostWritePage()));
+    setState(() {
+    });
   }
 
   Widget _buildFloatingBar() {
@@ -218,7 +234,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
       currentIndex: _currentIndex,
       onTap: (index) {
         if(index==2){
-          Navigator.of(context).push(bottomUpRoute(PostWritePage())); //nav 효과 추가 예정
+          _navigateAndDisplaySelection(context);
         }
         else {
           setState(() {

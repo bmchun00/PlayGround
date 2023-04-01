@@ -135,9 +135,9 @@ class _UserDetailPage extends State<StatefulWidget>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(DateFormat.yMMMd().add_jm().format(data['time']),
-                      style: TextStyle(fontSize: 10),),
+                      style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
                     SizedBox(height: 10,),
-                    Text(data['context'], style: TextStyle(fontSize: 20),),
+                    Text(data['context'], style: TextStyle(fontSize: 20, fontFamily: 'SCDream'),),
                     SizedBox(height: 15,),
                     Row(
                       children: [
