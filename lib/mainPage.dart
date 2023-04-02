@@ -1,6 +1,7 @@
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:playground/myPage.dart';
 import 'package:playground/pageRouteAnimation.dart';
 import 'package:playground/postWritePage.dart';
@@ -12,8 +13,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'login.dart';
+
 List<Map> cardDataList = List.empty(growable: true);
 FirebaseFirestore db = FirebaseFirestore.instance;
+
 
 class NoGlow extends ScrollBehavior {
   @override
@@ -33,6 +37,25 @@ class MainPage extends StatefulWidget{
 }
 
 class _MainPage extends State<MainPage> with TickerProviderStateMixin{
+  final storage = new FlutterSecureStorage();
+
+  Widget MyPage(){
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("My Page.."),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          child: Text("LOGOUT"),
+          onPressed: () async{
+            storage.deleteAll();
+            Navigator.of(context).pushReplacement(fadeRoute(LoginPage(), 200));
+          },
+        ),
+      ),
+    );
+  }
+
   bool _onLoading = true;
   String id;
   String fullName;
@@ -72,7 +95,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
           body: Text("This is My Page 3"),
         );
       case 4:
-        return MyPage();
+        return this.MyPage();
       default:
         return Scaffold(
           body: Text("This is Error Page"),

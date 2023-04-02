@@ -13,6 +13,8 @@ class LoginPage extends StatefulWidget{
 }
 
 class _LoginPage extends State<LoginPage>{
+  bool _rememberMe = false;
+  String? authCheck;
   TextEditingController? idController;
   TextEditingController? pwController;
   static final storage = new FlutterSecureStorage();
@@ -27,6 +29,7 @@ class _LoginPage extends State<LoginPage>{
   @override
   void initState(){
     super.initState();
+    authCheck = "";
     idController = TextEditingController();
     pwController = TextEditingController();
     _firebaseSetting();
@@ -60,7 +63,7 @@ class _LoginPage extends State<LoginPage>{
       borderRadius: BorderRadius.circular(50.0),
     ),
       hintText: hintTxt,
-      hintStyle: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 0, 0, 0.10980392156862744),),
+      hintStyle: TextStyle(fontSize: 20.0, color: Color.fromRGBO(0, 0, 0, 0.10980392156862744),fontFamily: 'SCDream'),
     );
   }
 
@@ -79,11 +82,15 @@ class _LoginPage extends State<LoginPage>{
       }
     });
 
-    if(isAuth){
+    if(isAuth && _rememberMe){
       await storage.write(key: "login", value: "id," + id + ",fullname," + userName!);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MainPage(id, userName!)));    //to do
+      Navigator.of(context).pushReplacement(fadeRoute(MainPage(id, userName!),200));  //to do
+    }else if(isAuth){
+      Navigator.of(context).pushReplacement(fadeRoute(MainPage(id, userName!),200));
     }else{
-      print("Login Error!");
+      setState(() {
+        authCheck = "Please check your ID or Password";
+      });
     }
   }
 
@@ -101,26 +108,60 @@ class _LoginPage extends State<LoginPage>{
                 Text("Ground.com", style: TextStyle(fontFamily: 'Pacifico',fontSize: 35,color: mColor2))
               ],
             ),
-            SizedBox(height: 55,),
+            SizedBox(height: 20,),
             Container(
               width: 300,
-              child: TextField(textAlignVertical: TextAlignVertical.center, controller: idController,decoration: _fieldDecoration("ID or Email Address"),style: TextStyle(fontSize: 17,color: Colors.black38),),
+              child: Text(authCheck!, textAlign: TextAlign.center, style: TextStyle(color: mColor1, fontFamily: 'SCDream'),),
+              height: 30,
+            ),
+            Container(
+              width: 300,
+              child: TextField(textAlignVertical: TextAlignVertical.center, controller: idController,decoration: _fieldDecoration("ID or Email Address"),style: TextStyle(fontSize: 17,color: Colors.black38,fontFamily: 'SCDream'),),
               height: 40,
             ),
             SizedBox(height: 10,),
             Container(
                 width: 300,
-                child: TextField(textAlignVertical: TextAlignVertical.center, controller: pwController,decoration: _fieldDecoration("Password"),style: TextStyle(fontSize: 17,color: Colors.black38),obscureText: true,),
+                child: TextField(textAlignVertical: TextAlignVertical.center, controller: pwController,decoration: _fieldDecoration("Password"),style: TextStyle(fontSize: 17,color: Colors.black38,fontFamily: 'SCDream'),obscureText: true,),
               height: 40,
             ),
-            SizedBox(height: 40,),
+            Container(
+              width: 300,
+              height: 40,
+              child: Row(
+                children: [
+                  Transform.scale(
+                    scale: 1,
+                    child: Checkbox(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                      activeColor: mColor1,
+                      checkColor: Colors.white,
+                      value: _rememberMe,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _rememberMe = value!;
+                        });
+                      },
+                      side: BorderSide(
+                        color: Colors.black26,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                  Text("Remember Me", style: TextStyle(fontSize: 15,fontFamily: 'SCDream',color: Colors.black45),),
+                ],
+              ),
+            ),
+            SizedBox(height: 10,),
             Container(
               width: 300,
               child: ElevatedButton(
                 onPressed: () {
                   auth(idController!.value.text, pwController!.value.text);
                 },
-                child: const Text('Login', style: TextStyle(fontSize: 15),),
+                child: const Text('Login', style: TextStyle(fontSize: 15,fontFamily: 'SCDream'),),
                 style: ElevatedButton.styleFrom(
                   primary: mColor1,
                   shape: RoundedRectangleBorder(
@@ -131,12 +172,13 @@ class _LoginPage extends State<LoginPage>{
                 ),
               ),
             ),
+
             SizedBox(height: 20,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Doesn't have an account? ",style: TextStyle(color: Colors.black45),),
-                InkWell(child:Text("Sign up",style: TextStyle(color: mColor2),),onTap: (){Navigator.push(context, fadeRoute((CreateAccountPage()), 200));}),
+                Text("Doesn't have an account? ",style: TextStyle(color: Colors.black45,fontFamily: 'SCDream'),),
+                InkWell(child:Text("Sign up",style: TextStyle(color: mColor2,fontFamily: 'SCDream'),),onTap: (){Navigator.push(context, fadeRoute((CreateAccountPage()), 200));}),
               ],
             )
           ],
