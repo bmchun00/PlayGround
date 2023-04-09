@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:playground/mainPage.dart';
 import 'package:playground/splash.dart';
 
+import 'colors.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -25,9 +27,12 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: createMaterialColor(mColor1),
+        appBarTheme: AppBarTheme(
+          color: Colors.white, //<-- SEE HERE
+        ),
       ),
-      home: SplashScreen(), //for debug
+      home: MainPage('test','TEST FULL'), //for debug
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:playground/pageRouteAnimation.dart';
 import 'package:playground/postWritePage.dart';
 import 'package:intl/intl.dart';
 import 'package:playground/userDetailPage.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'detailPage.dart';
 import 'colors.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +17,8 @@ import 'login.dart';
 
 List<Map> cardDataList = List.empty(growable: true);
 FirebaseFirestore db = FirebaseFirestore.instance;
+RefreshController _refreshController = RefreshController(initialRefresh: false);
+
 
 
 class NoGlow extends ScrollBehavior {
@@ -61,25 +64,41 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
 
   _MainPage(this.id, this.fullName);
 
+  void _onRefresh() async{
+    await Future.delayed(Duration(milliseconds: 1000));
+    getData();
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoad() async{
+    await Future.delayed(Duration(milliseconds: 1000));
+    _refreshController.loadComplete();
+  }
+
+
   Widget PageBuilder(int index){
     switch(index){
       case 0: //main main
         return Scaffold(
-          body: _onLoading? Center(child:CupertinoActivityIndicator(radius: 20,)) : CustomScrollView(
+          body: SmartRefresher(controller: _refreshController,
+            child: _onLoading? Center(child:CupertinoActivityIndicator(radius: 20,)) : CustomScrollView(
               scrollBehavior: NoGlow(),
               slivers: [
-              SliverAppBar(
-              toolbarHeight: 50.0,
-              backgroundColor: Colors.white,
-              elevation: 0.0,
-              title: Row(mainAxisAlignment:MainAxisAlignment.center, children: [Text("Play", style: TextStyle(color: mColor1, fontFamily: 'Pacifico'),),Text("Ground", style: TextStyle(color: mColor2, fontFamily: 'Pacifico'),),],),
-              floating: true,
-              centerTitle: true,
-              ),
-              SliverList(delegate: SliverChildListDelegate(List.generate(cardDataList!.length, (idx) => getCard(cardDataList![idx]))))
-            ],
-            physics: BouncingScrollPhysics(),
-          ),
+                SliverAppBar(
+                  toolbarHeight: 50.0,
+                  backgroundColor: Colors.white,
+                  elevation: 0.0,
+                  title: Row(mainAxisAlignment:MainAxisAlignment.center, children: [Text("Play", style: TextStyle(color: mColor1, fontFamily: 'Pacifico'),),Text("Ground", style: TextStyle(color: mColor2, fontFamily: 'Pacifico'),),],),
+                  floating: true,
+                  centerTitle: true,
+                ),
+                SliverList(delegate: SliverChildListDelegate(List.generate(cardDataList!.length, (idx) => getCard(cardDataList![idx]))))
+              ],
+            ),
+            onLoading: _onLoad,
+            onRefresh: _onRefresh,
+
+          )
         );
       case 1:
         return Scaffold(
@@ -105,7 +124,6 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
   Widget getCard(Map data){
     return Card(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)
         ),
         child: Column(
           children: [
@@ -115,11 +133,14 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
               },
               child: Row(
                 children: [
-                  Container(height: 100,width: 100, decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-                      image: DecorationImage(image: AssetImage(data['image']),fit: BoxFit.cover)),
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child:
+                    Container(height: 60,width: 60, decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        image: DecorationImage(image: AssetImage(data['image']),fit: BoxFit.cover)),
+                    ),
                   ),
-                  SizedBox(width: 20,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -143,7 +164,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
                 Navigator.of(context).push(fadeRoute(DetailPage(data['cardId']),200));
               },
               child: Padding(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
