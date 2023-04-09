@@ -129,7 +129,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
           children: [
             InkWell(
               onTap: (){
-                Navigator.of(context).push(fadeRoute(UserDetailPage(data['userId']!), 200));
+                Navigator.of(context).push(fadeRoute(UserDetailPage('test'), 200));
               },
               child: Row(
                 children: [
@@ -145,7 +145,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(data['fullName'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'SCDream'),),
-                      SizedBox(height: 10,),
+                      SizedBox(height: 5,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -153,7 +153,10 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
                           Text(' | ', style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
                           Text(data['userId'], style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
                         ],
-                      )
+                      ),
+                      SizedBox(height: 5,),
+                      Text(DateFormat.yMMMd().add_jm().format(data['time']), style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
+
                     ],
                   ),
                 ],
@@ -161,33 +164,35 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
             ),
             InkWell(
               onTap: (){
-                Navigator.of(context).push(fadeRoute(DetailPage(data['cardId']),200));
+                Navigator.of(context).push(fadeRoute(DetailPage(data),200));
               },
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(DateFormat.yMMMd().add_jm().format(data['time']), style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
+                    Row(),
+                    Text(data['title'], style: TextStyle(fontSize: 20, fontFamily: 'SCDream', fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 1,textAlign: TextAlign.start,),
                     SizedBox(height: 10,),
-                    Text(data['content'], style: TextStyle(fontSize: 20, fontFamily: 'SCDream'),),
-                    SizedBox(height: 15, ),
-                    Row(
-                      children: [
-                        IconButton(icon : Icon(Icons.favorite_border), onPressed: (){
-                          setState(() {
-                          });
-                        },splashRadius: 15,),
-                        SizedBox(width: 10,),
-                        Text(data['like'].toString()),
-                        SizedBox(width: 30,),
-                        IconButton(icon: Icon(Icons.messenger_outline_rounded), onPressed: () {  }, splashRadius: 15,),
-                        SizedBox(width: 10,),
-                        Text(data['comment'].toString()),
-                      ],
-                    ),
+                    Text(data['content'], style: TextStyle(fontSize: 17, fontFamily: 'SCDream'), overflow: TextOverflow.ellipsis, maxLines: 3,textAlign: TextAlign.start,),
                   ],
                 ),
+              ),
+            ),
+            Padding(padding: EdgeInsets.fromLTRB(12,0,0,20),
+              child: Row(
+                children: [
+                  IconButton(icon : Icon(Icons.favorite_border), onPressed: (){
+                    setState(() {
+                    });
+                  },splashRadius: 15,),
+                  SizedBox(width: 3,),
+                  Text(data['like'].toString(), style: TextStyle(fontFamily: 'SCDream', fontSize: 15),),
+                  SizedBox(width: 30,),
+                  IconButton(icon: Icon(Icons.messenger_outline_rounded), onPressed: () {  }, splashRadius: 15,),
+                  SizedBox(width: 3,),
+                  Text(data['comment'].toString(), style: TextStyle(fontFamily: 'SCDream', fontSize: 15),),
+                ],
               ),
             )
           ],
@@ -200,7 +205,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
       for (var doc in event.docs) {
         var data = doc.data();
         print(data);
-        cardDataList.add({'fullName' : data['fullName'], 'type' : data['type'], 'userId' : data['user'], 'cardId' : doc.id, 'time' : DateTime.fromMillisecondsSinceEpoch(data['time'].seconds * 1000), 'content' : data['content'], 'image' : 'image/1.jpg', 'like' : data['like'], 'comment' : data['comment']});
+        cardDataList.add({'fullName' : data['fullName'], 'type' : data['type'], 'userId' : data['user'], 'cardId' : doc.id, 'time' : DateTime.fromMillisecondsSinceEpoch(data['time'].seconds * 1000), 'content' : data['content'], 'image' : 'image/1.png', 'like' : data['like'], 'comment' : data['comment'], 'title' : data['title'] ?? '제목 없음'});
       }
       setState(() {
         _onLoading = false;
