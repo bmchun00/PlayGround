@@ -1,14 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'colors.dart';
 import 'detailPage.dart';
 import 'pageRouteAnimation.dart';
 
-
-Map cardDataDummyType1 = {'fullName' : 'Bmc Adaptive', 'type' : 1, 'userId' : 'BMC', 'cardId' : 1, 'time' : DateTime.parse('2023-03-29 20:18:04Z'), 'context' : 'Hello, Im BMC. I enjoy eating salmon and eating good food. I want to go to school, but I cant because Im stuck. Milkis zero is super delicious. Thank you.', 'image' : 'image/1.jpg'};
-Map cardDataDummyType2 = {'fullName' : 'Lisa soo', 'type' : 2, 'userId' : 'Lss09', 'cardId' : 2, 'time' : DateTime.parse('2023-03-28 10:28:04Z'), 'context' : 'developed by a Brazilian programmer and based on Semantle, challenges players to decipher the mysterious word of the day. Its a game on the web that', 'image' : 'image/2.jpg'};
-Map cardDataDummyType3 = {'fullName' : 'Joosu Park', 'type' : 3, 'userId' : 'jks2023', 'cardId' : 3, 'time' : DateTime.parse('2023-03-27 20:18:04Z'), 'context' : 'Thanos is a supervillain appearing in American comic books published by Marvel Comics. Created by writer-artist Jim Starlin, the character first appeared in The Invincible Iron Man', 'image' : 'image/3.jpg'};
-
+FirebaseFirestore db = FirebaseFirestore.instance;
+bool _onloading = true;
 
 class NoGlow extends ScrollBehavior {
   @override
@@ -18,33 +17,13 @@ class NoGlow extends ScrollBehavior {
   }
 }
 
-int uIdTouIdNum(String uId){
-  if(uId == 'BMC') return 0;
-  else if(uId == 'Lss09') return 1;
-  else return 2;
-}
-
-String typeToString(int type){
-  switch(type){
-    case 1:
-      return 'Formal';
-    case 2:
-      return 'Type 2';
-    case 3:
-      return 'Something..';
-    default:
-      return 'bluh';
-  }
-}
-
 class UserDetailPage extends StatefulWidget{
   String? userId;
+  String fullName;
   @override
-  State<StatefulWidget> createState() => _UserDetailPage(userId!);
+  State<StatefulWidget> createState() => _UserDetailPage(userId!, fullName);
 
-  UserDetailPage(String uId){
-    userId = uId;
-  }
+  UserDetailPage(this.userId, this.fullName);
 }
 
 class _UserDetailPage extends State<StatefulWidget>{
@@ -53,111 +32,86 @@ class _UserDetailPage extends State<StatefulWidget>{
   @override
   void initState(){
     super.initState();
-    switch(userId){  //실제 상황에서는 바꿔야 하는 부분
-      case 'BMC':
-        userCardDataList.add(cardDataDummyType1);
-        userCardDataList.add(cardDataDummyType1);
-        userCardDataList.add(cardDataDummyType1);
-        userCardDataList.add(cardDataDummyType1);
-        userCardDataList.add(cardDataDummyType1);
-        break;
-      case 'Lss09':
-        userCardDataList.add(cardDataDummyType2);
-        userCardDataList.add(cardDataDummyType2);
-        userCardDataList.add(cardDataDummyType2);
-        userCardDataList.add(cardDataDummyType2);
-        userCardDataList.add(cardDataDummyType2);
-        break;
-      default:
-        userCardDataList.add(cardDataDummyType3);
-        userCardDataList.add(cardDataDummyType3);
-        userCardDataList.add(cardDataDummyType3);
-        userCardDataList.add(cardDataDummyType3);
-        userCardDataList.add(cardDataDummyType3);
-        break;
-    }
+    _onloading = true;
+    _getData(userId);
   }
 
-  String? userId;
+  String userId;
+  String fullName;
 
-  _UserDetailPage(String uId){
-    userId = uId;
-  }
+  _UserDetailPage(this.userId, this.fullName);
 
   Widget getCard(Map data) {
     return Card(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)
         ),
         child: Column(
           children: [
             InkWell(
-              onTap: () {
+              onTap: (){
               },
               child: Row(
                 children: [
-                  Container(height: 100, width: 100, decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20)),
-                      image: DecorationImage(
-                          image: AssetImage(data['image']), fit: BoxFit.cover)),
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child:
+                    Container(height: 60,width: 60, decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        image: DecorationImage(image: AssetImage(data['image']),fit: BoxFit.cover)),
+                    ),
                   ),
-                  SizedBox(width: 20,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(data['fullName'], style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'SCDream'),),
-                      SizedBox(height: 10,),
+                      Text(data['fullName'], style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'SCDream'),),
+                      SizedBox(height: 5,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(typeToString(data['type']),
-                            style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
+                          Text(data['type'], style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
                           Text(' | ', style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
                           Text(data['userId'], style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
                         ],
-                      )
+                      ),
+                      SizedBox(height: 5,),
+                      Text(DateFormat.yMMMd().add_jm().format(data['time']), style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
+
                     ],
                   ),
                 ],
               ),
             ),
             InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                    fadeRoute(DetailPage(data['cardId']), 200));
+              onTap: (){
+                Navigator.of(context).push(fadeRoute(DetailPage(data),200));
               },
               child: Padding(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(DateFormat.yMMMd().add_jm().format(data['time']),
-                      style: TextStyle(fontSize: 10, fontFamily: 'SCDream'),),
+                    Row(),
+                    Text(data['title'], style: TextStyle(fontSize: 20, fontFamily: 'SCDream', fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 1,textAlign: TextAlign.start,),
                     SizedBox(height: 10,),
-                    Text(data['context'], style: TextStyle(fontSize: 20, fontFamily: 'SCDream'),),
-                    SizedBox(height: 15,),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.favorite_border), onPressed: () {
-                          print("heart");
-                          setState(() {});
-                        }, splashRadius: 15,),
-                        SizedBox(width: 10,),
-                        Text("73"),
-                        SizedBox(width: 30,),
-                        IconButton(icon: Icon(Icons.messenger_outline_rounded),
-                          onPressed: () {},
-                          splashRadius: 15,),
-                        SizedBox(width: 10,),
-                        Text("1"),
-                      ],
-                    ),
+                    Text(data['content'], style: TextStyle(fontSize: 17, fontFamily: 'SCDream'), overflow: TextOverflow.ellipsis, maxLines: 3,textAlign: TextAlign.start,),
                   ],
                 ),
+              ),
+            ),
+            Padding(padding: EdgeInsets.fromLTRB(12,0,0,20),
+              child: Row(
+                children: [
+                  IconButton(icon : Icon(Icons.favorite_border), onPressed: (){
+                    setState(() {
+                    });
+                  },splashRadius: 15,),
+                  SizedBox(width: 3,),
+                  Text(data['like'].toString(), style: TextStyle(fontFamily: 'SCDream', fontSize: 15),),
+                  SizedBox(width: 30,),
+                  IconButton(icon: Icon(Icons.messenger_outline_rounded), onPressed: () {  }, splashRadius: 15,),
+                  SizedBox(width: 3,),
+                  Text(data['comment'].toString(), style: TextStyle(fontFamily: 'SCDream', fontSize: 15),),
+                ],
               ),
             )
           ],
@@ -165,6 +119,18 @@ class _UserDetailPage extends State<StatefulWidget>{
     );
   }
 
+  void _getData(String uId) async{
+    await db.collection("posts").where("user",isEqualTo: uId).orderBy("time", descending: true).get().then((event) {
+      userCardDataList = List.empty(growable: true);
+      for (var doc in event.docs) {
+        var data = doc.data();
+        userCardDataList.add({'fullName' : data['fullName'], 'type' : data['type'], 'userId' : data['user'], 'cardId' : doc.id, 'time' : DateTime.fromMillisecondsSinceEpoch(data['time'].seconds * 1000), 'content' : data['content'], 'image' : 'image/1.png', 'like' : data['like'], 'comment' : data['comment'], 'title' : data['title'] ?? '제목 없음'});
+      }
+      setState(() {
+        _onloading = false;
+      });
+    });
+  }
 
   Widget build(BuildContext context){
     return Scaffold(
@@ -192,10 +158,10 @@ class _UserDetailPage extends State<StatefulWidget>{
                 children: [
                   Container(height: 150,width: 150, decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(100)),
-                      image: DecorationImage(image: AssetImage(userCardDataList[uIdTouIdNum(userId!)]['image']),fit: BoxFit.cover)), //임시 코드
+                      image: DecorationImage(image: AssetImage('image/1.png'),fit: BoxFit.cover)), //임시 코드
                   ),
                   SizedBox(height: 20,),
-                  Text(userCardDataList[uIdTouIdNum(userId!)]['fullName'], style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, fontFamily: 'SCDream'),),
+                  Text(fullName!, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, fontFamily: 'SCDream'),),
                   Container(
                     width: 50,
                     child: Divider(color: Colors.black, thickness: 0.3,),
@@ -209,7 +175,7 @@ class _UserDetailPage extends State<StatefulWidget>{
             snap: false,
 
           ),
-          SliverList(delegate: SliverChildListDelegate(List.generate(userCardDataList.length, (idx) => getCard(userCardDataList[idx]))))
+          SliverList(delegate: SliverChildListDelegate(List.generate(userCardDataList.length, (idx) => getCard(userCardDataList[idx])))),
         ],
         physics: BouncingScrollPhysics(),
       ),

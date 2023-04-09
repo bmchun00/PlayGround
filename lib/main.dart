@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:playground/mainPage.dart';
 import 'package:playground/splash.dart';
-
 import 'colors.dart';
 
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light
+  ));
   runApp(const MyApp());
 }
 
@@ -32,7 +37,7 @@ class MyApp extends StatelessWidget {
           color: Colors.white, //<-- SEE HERE
         ),
       ),
-      home: MainPage('test','TEST FULL'), //for debug
+      home: SplashScreen(), //for debug
     );
   }
 }

@@ -102,7 +102,7 @@ class _CreatAccountPage extends State<CreateAccountPage>{
                   onPressed: () {
                     uploadLoginData();
                   },
-                  child: const Text('Submit', style: TextStyle(fontSize: 15),),
+                  child: const Text('Submit', style: TextStyle(fontSize: 15,color: Colors.white),),
                   style: ElevatedButton.styleFrom(
                     primary: mColor1,
                     shape: RoundedRectangleBorder(

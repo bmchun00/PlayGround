@@ -129,7 +129,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
           children: [
             InkWell(
               onTap: (){
-                Navigator.of(context).push(fadeRoute(UserDetailPage('test'), 200));
+                Navigator.of(context).push(fadeRoute(UserDetailPage(data['userId'],data['fullName']), 200));
               },
               child: Row(
                 children: [
@@ -204,7 +204,6 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
       cardDataList = List.empty(growable: true);
       for (var doc in event.docs) {
         var data = doc.data();
-        print(data);
         cardDataList.add({'fullName' : data['fullName'], 'type' : data['type'], 'userId' : data['user'], 'cardId' : doc.id, 'time' : DateTime.fromMillisecondsSinceEpoch(data['time'].seconds * 1000), 'content' : data['content'], 'image' : 'image/1.png', 'like' : data['like'], 'comment' : data['comment'], 'title' : data['title'] ?? '제목 없음'});
       }
       setState(() {

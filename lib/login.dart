@@ -161,7 +161,7 @@ class _LoginPage extends State<LoginPage>{
                 onPressed: () {
                   auth(idController!.value.text, pwController!.value.text);
                 },
-                child: const Text('Login', style: TextStyle(fontSize: 15,fontFamily: 'SCDream'),),
+                child: const Text('Login', style: TextStyle(fontSize: 15,fontFamily: 'SCDream',color: Colors.white),),
                 style: ElevatedButton.styleFrom(
                   primary: mColor1,
                   shape: RoundedRectangleBorder(

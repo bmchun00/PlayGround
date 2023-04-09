@@ -57,9 +57,10 @@ class _PostWritePage extends State<StatefulWidget>{
                 TextField(
                   controller: titleController,
                   decoration: InputDecoration(
-                    hintText: "Title",
+                    hintText: "Title*",
                     hintStyle: TextStyle(fontSize: 20.0,fontFamily: 'SCDream'),
                   ),
+                  style: TextStyle(fontSize: 20.0,fontFamily: 'SCDream'),
                 ),
                 TextField(
                   controller: contentController,
@@ -67,6 +68,7 @@ class _PostWritePage extends State<StatefulWidget>{
                     hintText: "Content",
                     hintStyle: TextStyle(fontSize: 20.0,fontFamily: 'SCDream'),
                   ),
+                  style:  TextStyle(fontSize: 20.0,fontFamily: 'SCDream'),
                 ),
               ],
             ),
