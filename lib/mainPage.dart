@@ -129,7 +129,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
           children: [
             InkWell(
               onTap: (){
-                Navigator.of(context).push(fadeRoute(UserDetailPage(data['userId'],data['fullName']), 200));
+                Navigator.of(context).push(fadeRoute(UserDetailPage(data['userId'],data['fullName'],id,fullName), 200));
               },
               child: Row(
                 children: [
@@ -164,7 +164,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
             ),
             InkWell(
               onTap: (){
-                Navigator.of(context).push(fadeRoute(DetailPage(data),200));
+                Navigator.of(context).push(fadeRoute(DetailPage(data, id, fullName),200));
               },
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -191,7 +191,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
                   SizedBox(width: 30,),
                   IconButton(icon: Icon(Icons.messenger_outline_rounded), onPressed: () {  }, splashRadius: 15,),
                   SizedBox(width: 3,),
-                  Text(data['comment'].toString(), style: TextStyle(fontFamily: 'SCDream', fontSize: 15),),
+                  //Text(data['comment'].toString(), style: TextStyle(fontFamily: 'SCDream', fontSize: 15),),
                 ],
               ),
             )

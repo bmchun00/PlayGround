@@ -71,7 +71,7 @@ class _LoginPage extends State<LoginPage>{
     String? userName;
     bool isAuth = false;
 
-    await db.collection("users").get().then((event) {
+    await db.collection("users").where("id",isEqualTo: id).get().then((event) {
       cardDataList = List.empty(growable: true);
       for (var doc in event.docs) {
         var data = doc.data();

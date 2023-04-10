@@ -10,11 +10,26 @@ class CreateAccountPage extends StatefulWidget{
   State<CreateAccountPage> createState() => _CreatAccountPage();
 }
 
+Future<bool> _idCheck(String uId) async{
+  bool ret = false;
+  await db.collection("users").where("id",isEqualTo: uId).get().then((event) {
+    try{
+      event.docs[0];
+      ret = false;
+    }catch(e){
+      print("catch");
+      ret = true;
+    }
+  });
+  return ret;
+}
+
 class _CreatAccountPage extends State<CreateAccountPage>{
   TextEditingController? _idController;
   TextEditingController? _nameController;
   TextEditingController? _pw1Controller;
   TextEditingController? _pw2Controller;
+  String errorText = "";
 
   @override
   void initState(){
@@ -71,7 +86,9 @@ class _CreatAccountPage extends State<CreateAccountPage>{
                   Text("Ground.com", style: TextStyle(fontFamily: 'Pacifico',fontSize: 35,color: mColor2))
                 ],
               ),
-              SizedBox(height: 55,),
+              SizedBox(height: 20,),
+              Text(errorText, textAlign: TextAlign.center, style: TextStyle(color: mColor1, fontFamily: 'SCDream'),),
+              SizedBox(height: 20,),
               Container(
                 width: 300,
                 child: TextField(textAlignVertical: TextAlignVertical.center, controller: _nameController,decoration: _fieldDecoration("Full Name"),style: TextStyle(fontSize: 17,color: Colors.black38),),
@@ -99,8 +116,32 @@ class _CreatAccountPage extends State<CreateAccountPage>{
               Container(
                 width: 300,
                 child: ElevatedButton(
-                  onPressed: () {
-                    uploadLoginData();
+                  onPressed: () async {
+                    setState(() {
+                      errorText = "";
+                    });
+                    if(await _idCheck(_idController!.value.text)){
+                      if(_pw1Controller!.value.text == _pw2Controller!.value.text && _pw1Controller!.value.text != "")
+                        {
+                          if(_nameController!.value.text==""){
+                            setState(() {
+                              errorText = "Please check your name";
+                            });
+                          }else{
+                            uploadLoginData();
+                          }
+                        }
+                      else{
+                        setState(() {
+                          errorText = "Please check your password";
+                        });
+                      }
+                    }
+                    else{
+                      setState(() {
+                        errorText = "Your ID already exists.";
+                      });
+                    }
                   },
                   child: const Text('Submit', style: TextStyle(fontSize: 15,color: Colors.white),),
                   style: ElevatedButton.styleFrom(

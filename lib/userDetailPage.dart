@@ -20,10 +20,12 @@ class NoGlow extends ScrollBehavior {
 class UserDetailPage extends StatefulWidget{
   String? userId;
   String fullName;
+  String id;
+  String name;
   @override
-  State<StatefulWidget> createState() => _UserDetailPage(userId!, fullName);
+  State<StatefulWidget> createState() => _UserDetailPage(userId!, fullName,id,name);
 
-  UserDetailPage(this.userId, this.fullName);
+  UserDetailPage(this.userId, this.fullName,this.id,this.name);
 }
 
 class _UserDetailPage extends State<StatefulWidget>{
@@ -38,8 +40,10 @@ class _UserDetailPage extends State<StatefulWidget>{
 
   String userId;
   String fullName;
+  String myId;
+  String myName;
 
-  _UserDetailPage(this.userId, this.fullName);
+  _UserDetailPage(this.userId, this.fullName,this.myId,this.myName);
 
   Widget getCard(Map data) {
     return Card(
@@ -83,7 +87,7 @@ class _UserDetailPage extends State<StatefulWidget>{
             ),
             InkWell(
               onTap: (){
-                Navigator.of(context).push(fadeRoute(DetailPage(data),200));
+                Navigator.of(context).push(fadeRoute(DetailPage(data,myId,myName),200));
               },
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -110,7 +114,7 @@ class _UserDetailPage extends State<StatefulWidget>{
                   SizedBox(width: 30,),
                   IconButton(icon: Icon(Icons.messenger_outline_rounded), onPressed: () {  }, splashRadius: 15,),
                   SizedBox(width: 3,),
-                  Text(data['comment'].toString(), style: TextStyle(fontFamily: 'SCDream', fontSize: 15),),
+                  //Text(data['comment'].toString(), style: TextStyle(fontFamily: 'SCDream', fontSize: 15),),
                 ],
               ),
             )
