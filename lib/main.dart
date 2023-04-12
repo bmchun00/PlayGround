@@ -37,7 +37,8 @@ class MyApp extends StatelessWidget {
           color: Colors.white, //<-- SEE HERE
         ),
       ),
-      home: MainPage('test','TEST FULL'), //for debug
+      //home: SplashScreen(), //for debug
+      home: MainPage('test','TEST FULL'),
     );
   }
 }

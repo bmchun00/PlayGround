@@ -11,17 +11,11 @@ class CreateAccountPage extends StatefulWidget{
 }
 
 Future<bool> _idCheck(String uId) async{
-  bool ret = false;
+  bool? ret;
   await db.collection("users").where("id",isEqualTo: uId).get().then((event) {
-    try{
-      event.docs[0];
-      ret = false;
-    }catch(e){
-      print("catch");
-      ret = true;
-    }
+    ret= event.docs.isEmpty;
   });
-  return ret;
+  return ret!;
 }
 
 class _CreatAccountPage extends State<CreateAccountPage>{

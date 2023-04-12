@@ -39,7 +39,7 @@ class _DetailPage extends State<StatefulWidget>{
     return Card(
         shape: RoundedRectangleBorder(
         ),
-        child: Column(
+        child: ListView(
           children: [
             Row(
               children: [
@@ -128,6 +128,8 @@ class _DetailPage extends State<StatefulWidget>{
             Divider(),
             SizedBox(height: 5,),
             Expanded(child: ListView.builder(
+              shrinkWrap : true,
+              physics : NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index){
                 return Padding(padding: EdgeInsets.fromLTRB(25, 0, 25, 5),
                   child: Container(
@@ -146,8 +148,11 @@ class _DetailPage extends State<StatefulWidget>{
                           ],
                         ),
                         SizedBox(height: 5,),
-                        Row(
+                        Wrap(
+                          alignment: WrapAlignment.start,
+                          direction: Axis.horizontal,
                           children: [
+                            Row(),
                             Text(commentDataList[index]['content'], textAlign: TextAlign.start, style: TextStyle(fontSize: 15, fontFamily: 'SCDream'),),
                           ],
                         ),
