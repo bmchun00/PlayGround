@@ -1,13 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_support/file_support.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:playground/mainPage.dart';
 import 'colors.dart';
-import 'dart:io';
-
+import 'dart:html' as html;
+import 'package:image_picker_web/image_picker_web.dart';
+import 'dart:io' as i;
 
 
 class PostWritePage extends StatefulWidget{
@@ -24,9 +28,8 @@ class _PostWritePage extends State<StatefulWidget>{
   String id;
   String fullName;
   _PostWritePage(this.id, this.fullName);
+  List<Uint8List> bytesFromPicker = [];
 
-  final ImagePicker _picker = ImagePicker();
-  List<XFile> pickedImgs = [];
 
   TextEditingController? contentController;
   TextEditingController? titleController;
@@ -45,19 +48,6 @@ class _PostWritePage extends State<StatefulWidget>{
             color: Theme.of(context).colorScheme.primary,
           ),
         ));
-      case 3:
-        return pickedImgs.length <= 4 ? Container() : FittedBox(
-          child: Container(
-            padding: EdgeInsets.all(6),
-            decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.6),
-                shape: BoxShape.circle
-            ),
-            child: Text(
-              '+${(pickedImgs.length-4).toString()}',
-            ),
-          ),
-        );
       default:
         return Container();
     }
@@ -65,18 +55,22 @@ class _PostWritePage extends State<StatefulWidget>{
   
 
   Future<void> pickImage() async{
-    final List<XFile>? imgs = await _picker.pickMultiImage();
-    if(imgs != null){
-      setState(() {
-        pickedImgs = imgs;
-      });
+    bytesFromPicker = await ImagePickerWeb.getMultiImagesAsBytes() ?? [];
+    if(bytesFromPicker.length>=4){
+      bytesFromPicker = bytesFromPicker.sublist(0,4);
     }
+    setState(() {
+    });
   }
 
 
-
   void submitCard (String content, String type, String title) async{
-    await db.collection("posts").add({'fullName' : fullName, 'type' : type, 'user' : id, 'time' :Timestamp.fromDate(DateTime.now()), 'content' : content, 'like' : 0, 'comment' : 0, 'title' : title}).then((DocumentReference doc) =>
+    List<String> base64ImgList = [];
+    bytesFromPicker.forEach((item) async {
+      base64ImgList.add(base64Encode(item));
+    });
+
+    await db.collection("posts").add({'imgCount' : bytesFromPicker.length, 'imgs' : base64ImgList, 'fullName' : fullName, 'type' : type, 'user' : id, 'time' :Timestamp.fromDate(DateTime.now()), 'content' : content, 'like' : 0, 'comment' : 0, 'title' : title}).then((DocumentReference doc) =>
     print('DocumentSnapshot added with ID: ${doc.id}'));
     Navigator.of(context).pop();
   }
@@ -88,6 +82,7 @@ class _PostWritePage extends State<StatefulWidget>{
     titleController = TextEditingController();
   }
 
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -97,7 +92,7 @@ class _PostWritePage extends State<StatefulWidget>{
         elevation: 0,
         title: Text("Add Card", style: TextStyle(color: mColor1, fontFamily: 'Pacifico'),),
         actions: [
-          IconButton(icon: Icon(Icons.save), color: mColor1, onPressed: () { submitCard(contentController!.value.text, 'Formal', titleController!.value.text); },),
+          Padding(padding: EdgeInsets.fromLTRB(0, 0, 10, 0), child: IconButton(icon: Icon(Icons.save), color: mColor1, onPressed: () { submitCard(contentController!.value.text, 'Formal', titleController!.value.text); },),)
         ],
       ),
       body: Container(
@@ -105,7 +100,7 @@ class _PostWritePage extends State<StatefulWidget>{
         child: Center(
           child: Padding(
             padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-            child: Column(
+            child: ListView(
               children: [
                 TextField(
                   controller: titleController,
@@ -116,6 +111,9 @@ class _PostWritePage extends State<StatefulWidget>{
                   style: TextStyle(fontSize: 20.0,fontFamily: 'SCDream'),
                 ),
                 TextField(
+                  keyboardType: TextInputType.multiline,
+                  minLines: 10,
+                  maxLines: null,
                   controller: contentController,
                   decoration: InputDecoration(
                     hintText: "Content",
@@ -123,10 +121,10 @@ class _PostWritePage extends State<StatefulWidget>{
                   ),
                   style:  TextStyle(fontSize: 20.0,fontFamily: 'SCDream'),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(height: 15,),
                 SizedBox(
-                  height: 350,
                   child: GridView.count(
+                    shrinkWrap: true,
                       crossAxisCount: 2,
                     padding: EdgeInsets.all(2),
                     mainAxisSpacing: 5,
@@ -136,15 +134,15 @@ class _PostWritePage extends State<StatefulWidget>{
                         child: Center(
                           child: getBoxContents(index),
                         ),
-                        decoration: index <= pickedImgs.length -1
-                        ? BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: Image.network(pickedImgs[index].path).image,
+                          decoration: index <= bytesFromPicker.length-1
+                              ? BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: Image.memory(bytesFromPicker[index]).image,
+                              )
                           )
-                        )
-                            : null
+                              : null
                       ),
                       color: Colors.grey,
                       dashPattern: [5,4],

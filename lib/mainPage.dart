@@ -179,6 +179,16 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
                 ),
               ),
             ),
+            data['imgCount'] > 0 ? Padding(padding: EdgeInsets.fromLTRB(18, 0, 20,0),
+              child: Row(
+                children: [
+                  Flexible(fit: FlexFit.tight, child: SizedBox()),
+                  Icon(Icons.photo, color: mColor1, size: 20,),
+                  SizedBox(width: 1,),
+                  Text("+${data['imgCount']}", style: TextStyle(fontFamily: 'SCDream', fontSize: 12,color: mColor1),)
+                ],
+              ),
+            ) : SizedBox(),
             Padding(padding: EdgeInsets.fromLTRB(12,0,0,20),
               child: Row(
                 children: [
@@ -204,7 +214,7 @@ class _MainPage extends State<MainPage> with TickerProviderStateMixin{
       cardDataList = List.empty(growable: true);
       for (var doc in event.docs) {
         var data = doc.data();
-        cardDataList.add({'fullName' : data['fullName'], 'type' : data['type'], 'userId' : data['user'], 'cardId' : doc.id, 'time' : DateTime.fromMillisecondsSinceEpoch(data['time'].seconds * 1000), 'content' : data['content'], 'image' : 'image/1.png', 'like' : data['like'], 'comment' : data['comment'], 'title' : data['title'] ?? '제목 없음'});
+        cardDataList.add({'imgs' : data['imgs'] ?? [],'imgCount' : data['imgCount'] ?? 0 ,'fullName' : data['fullName'], 'type' : data['type'], 'userId' : data['user'], 'cardId' : doc.id, 'time' : DateTime.fromMillisecondsSinceEpoch(data['time'].seconds * 1000), 'content' : data['content'], 'image' : 'image/1.png', 'like' : data['like'], 'comment' : data['comment'], 'title' : data['title'] ?? '제목 없음'});
       }
       setState(() {
         _onLoading = false;

@@ -1,8 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:playground/mainPage.dart';
-
 import 'colors.dart';
 
 class DetailPage extends StatefulWidget{
@@ -33,6 +34,17 @@ class _DetailPage extends State<StatefulWidget>{
     // TODO: implement initState
     super.initState();
     getCommentData();
+  }
+
+  List<Widget> getImgList(List imgs){
+    List<Widget> toRet = [];
+    imgs.forEach((item) {
+      toRet.add(
+          Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+          child: Image.memory(base64Decode(item)),)
+      );
+    });
+    return toRet;
   }
 
   Widget getCard(Map data){
@@ -83,6 +95,11 @@ class _DetailPage extends State<StatefulWidget>{
                 ],
               ),
             ),
+            ListView(
+              shrinkWrap: true,
+              physics : NeverScrollableScrollPhysics(),
+              children: getImgList(data['imgs']),
+            ),
             Padding(padding: EdgeInsets.fromLTRB(12,0,0,12),
               child: Row(
                 children: [
@@ -127,7 +144,7 @@ class _DetailPage extends State<StatefulWidget>{
             ),
             Divider(),
             SizedBox(height: 5,),
-            Expanded(child: ListView.builder(
+            Container(child: ListView.builder(
               shrinkWrap : true,
               physics : NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index){
